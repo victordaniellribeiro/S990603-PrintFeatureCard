@@ -23,6 +23,7 @@
             '<div class="name">{Name}</div>' +
             '<div class="description">{Description}</div>' +
             '</div>' +
+            '<span class="preliminaryestimate">{[this.getPreliminaryEstimate(values)]}</span>' +
             '<span class="planestimate">{[this.getEstimate(values)]}</span>' +
             '</div></tpl>', {
                 getOwnerImage: function(values) {
@@ -33,11 +34,13 @@
                 },
                 getParentID: function(values) {
                     return values.WorkProduct && (':' + values.WorkProduct.FormattedID) || '';
+                },                
+                getPreliminaryEstimate: function(values) {                    
+                    return values.PreliminaryEstimate && values.PreliminaryEstimate.Name || 'None';
                 },
                 // Tasks have Estimate(s), Stories have PlanEstimate(s)
                 getEstimate: function(values) {
-                    // return values.Estimate || values.LeafStoryPlanEstimateTotal || 'None';
-                    return values.Estimate || values.PlanEstimate || 'None';
+                    return values.Estimate || values.LeafStoryPlanEstimateTotal || 'None';                    
                 }
             }
         )
@@ -78,10 +81,8 @@
             Ext.create('Rally.data.wsapi.Store', {
                 context: this.getContext().getDataContext(),
                 autoLoad: true,
-                // model: Ext.identityFn('PortfolioItem/Feature'),
-                model: Ext.identityFn('UserStory'),
-                // fetch: ['FormattedID', 'Name', 'Owner', 'Description', 'LeafStoryPlanEstimateTotal'],
-                fetch: ['FormattedID', 'Name', 'Owner', 'Description', 'PlanEstimate'],
+                model: Ext.identityFn('PortfolioItem/Feature'),
+                fetch: ['FormattedID', 'Name', 'Owner', 'Description', 'LeafStoryPlanEstimateTotal', 'PreliminaryEstimate'],
                 limit: (scope.getRecord()) ? 200 : 50,
                 listeners: {
                     load: this._onStoriesLoaded,
@@ -251,6 +252,12 @@
   bottom: 0.5em;
   position: absolute;
   right: 0.5em;
+}
+.printcards .preliminaryestimate {
+  margin: 0.25em auto 0 auto;
+  padding-left: 1.0em;
+  bottom: 0.5em;
+  position: absolute;
 }
 .printcards .content {
   height: 2.4in;
