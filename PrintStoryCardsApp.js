@@ -130,7 +130,6 @@
 
                     doc.write('<html><head>' + css + '<title>' + title + '</title>');
                     doc.write('</head><body class="printcards">');
-                    doc.write('<p>My Grid: ' + title + '</p><br />');
                     doc.write(grid.getEl().dom.innerHTML);
                     doc.write('</body></html>');
                     doc.close();
